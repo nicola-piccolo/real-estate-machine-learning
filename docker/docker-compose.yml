@@ -1,0 +1,10 @@
+version: "3.8"
+services:
+  real-estate-ml:
+    image: real-estate-ml:latest
+    ports: 
+      - 8000:8000
+    volumes:
+      - real-estate-ml-logs:/var/log/real-estate-ml
+volumes:
+  real-estate-ml-logs:
