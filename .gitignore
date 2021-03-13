@@ -1,2 +1,5 @@
 /real-estate-machine-learning-venv
+/src/logs
+**/__pycache__
 *.csv
+.vscode/

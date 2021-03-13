@@ -19,10 +19,10 @@ WORKDIR $HOME_DIRECTORY
 COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 COPY src ./
-COPY docker/prodBootstrap.sh .
+COPY docker/bootstrap.sh .
 RUN chown -R real-estate-ml:real-estate-ml $HOME_DIRECTORY
 USER real-estate-ml
 
 EXPOSE 8000
 
-ENTRYPOINT ["sh", "prodBootstrap.sh"]
+ENTRYPOINT ["sh", "bootstrap.sh"]
