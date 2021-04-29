@@ -1,10 +1,39 @@
 version: "3.8"
 services:
+  database:
+    image: mysql:latest
+    expose:
+      - 3306
+    volumes:
+      - ./database-init:/docker-entrypoint-initdb.d
+      - database-data:/var/lib/mysql
+    env_file:
+      - ./.database-env
+    networks: 
+      - real-estate-network
   real-estate-ml:
     image: real-estate-ml:latest
-    ports: 
-      - 8000:8000
+    expose: 
+      - 8000
     volumes:
-      - real-estate-ml-logs:/var/log/real-estate-ml
+      - ../logs:/home/real-estate-ml/logs
+    env_file:
+      - ./.real-estate-ml-env
+    depends_on:
+      - database
+    networks: 
+      - real-estate-network
+  reverse-proxy:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - real-estate-ml
+    ports:
+      - 8001:8001
+    networks: 
+      - real-estate-network
 volumes:
-  real-estate-ml-logs:
+  database-data:
+networks:
+  real-estate-network:
