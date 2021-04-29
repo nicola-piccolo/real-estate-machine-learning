@@ -14,24 +14,33 @@ class Configuration:
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         file_logger.setFormatter(formatter)
         application.logger.addHandler(file_logger)
+    
+    @staticmethod
+    def set_database_connection_string(application):
+        username = os.environ.get('REAL_ESTATE_ML_DATABASE_USER')
+        password = os.environ.get('REAL_ESTATE_ML_DATABASE_PASSWORD')
+        hostname = os.environ.get('REAL_ESTATE_ML_DATABASE_HOSTNAME')
+        database = os.environ.get('REAL_ESTATE_ML_DATABASE_NAME')
+        connection_string = f'mysql+mysqlconnector://{ username }:{ password }@{ hostname }/{ database }'
+        application.config['SQLALCHEMY_DATABASE_URI'] = connection_string
+        application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 class DevelopmentConfiguration(Configuration):
+
     @classmethod
     def init_app(configuration_class, application):
         Configuration.add_file_logger(application, logging.DEBUG)
-
-class TestConfiguration(Configuration):
-    @classmethod
-    def init_app(configuration_class, application):
-        application.logger.addHandler(logging.NullHandler())
+        Configuration.set_database_connection_string(application)
+        
 
 class ProductionConfiguration(Configuration):
+
     @classmethod
     def init_app(configuration_class, application):
         Configuration.add_file_logger(application, logging.WARNING)
+        Configuration.set_database_connection_string(application)
 
 environmentConfigurationDictionary = {
     'development': DevelopmentConfiguration,
-    'testing': TestConfiguration,
     'production': ProductionConfiguration
 }

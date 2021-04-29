@@ -1,5 +1,5 @@
 import jsonschema
-from .responseBuilder import ResponseBuilder
+from .ResponseBuilder import ResponseBuilder
 from . import realEstateMl
 
 @realEstateMl.errorhandler(400)

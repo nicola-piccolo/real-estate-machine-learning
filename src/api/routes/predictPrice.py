@@ -1,7 +1,7 @@
 from flask import request, jsonify
 from flask_expects_json import expects_json
 from . import realEstateMl
-from .responseBuilder import ResponseBuilder
+from .ResponseBuilder import ResponseBuilder
 from .jsonschema.predictPriceJsonSchema import schema
 from api.modules.pricePredictor.PricePredictor import PricePredictor
 
